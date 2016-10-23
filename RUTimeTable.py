@@ -8,21 +8,21 @@ class RUTTNodeType (Enum):
 	RUTTUnknown = 0x05
 	
 class RUTTNode:
-	def __init__(self, thisStation, thisTrain, timeStamp, nodeType):
-		self.thisStation = thisStation
-		self.thisTrain = thisTrain
-		self.timeStamp = timeStamp
-		self.nodeType = nodeType
+	def __init__(self, this_station, this_train, time_stamp, node_type):
+		self.this_station = this_station
+		self.this_train = this_train
+		self.time_stamp = time_stamp
+		self.node_type = node_type
 	
 	def __str__(self):
-		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.thisStation, self.thisTrain, self.timeStamp, self.nodeType)
+		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.this_station, self.this_train, self.time_stamp, self.node_Type)
 	
 class RUTTStationNode:
 	def __init__ (self, name, id):
 		self.name = name
 		self.id = id
 		self.schedules = []
-		self.existLine = []
+		self.exist_lines = []
 	
 	def __str__(self):
 		return str.format('RUTTStationNode\n|- {0}\n\\- {1}', self.name, self.id)
@@ -31,9 +31,9 @@ class RUTTTrainNode:
 	def __init__ (self, id):
 		self.id = id
 		schedule = []
-		operateDay = ''
-		departureStation = None
-		destinationStation = None
+		operate_days = ''
+		departure_station = None
+		destination_station = None
 		
 	def __str__ (self):
 		return str.format( 'RUTTTrainNode\n-\\{0}', self.id )
@@ -50,9 +50,10 @@ class RULineListNode:
 
 class RUTimeTable:
 	def __init__ (self):
-		self.lineList = []
-		self.allStationList = []
-		self.allTrainList = []
+		self.line_list = []
+		self.all_station_list = []
+		self.all_train_list = []
+	
 
 
 def main():
@@ -61,9 +62,9 @@ def main():
 
 	# Create Lines and Stations
 	line = RULineListNode('主線')
-	timetable.lineList.append(line)
+	timetable.line_list.append(line)
 	
-	print (timetable.lineList)
+	print (timetable.line_list)
 	
 
 if __name__ == '__main__':
