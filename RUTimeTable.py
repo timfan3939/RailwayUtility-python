@@ -67,14 +67,14 @@ class RUTTTrainNode:
 		return str.format( 'RUTTTrainNode\n-\\{0}', self.id )
 	
 class RULineStationListNode:
-	def __init__ (self):
-		self.station = None
-		self.distance = -1
+	def __init__ (self, station, milestone):
+		self.station = station
+		self.milestone = milestone
 
 class RULineListNode:
 	def __init__ (self, name):
 		self.name = name
-		line = None
+		self.line = []
 
 class RUTimeTable:
 	def __init__ (self):
@@ -87,15 +87,48 @@ class RUTimeTable:
 def main():
 	# Create Time Table instance
 	timetable = RUTimeTable()
-
-	# Create Lines and Stations
-	line = RULineListNode('主線')
-	timetable.line_list.append(line)
-	line.
 	
-	print (timetable.line_list)
+	# Create 10 Stations
+	for i in range(10):
+		newStation = RUTTStationNode( str.format('Station{}', i), 100 + i )
+		timetable.all_station_list.append(newStation)
+	
+	timetable.all_station_list.sort(key=attrgetter('id') )
+				
+	# Create Two Lines
+	line1 = RULineListNode('主線')
+	line2 = RULineListNode('副線')
+	
+	# Add Stations to Line 1
+	# 
+	# 0 - 1 - 2 - 3 - 4 - 5 - 6 
+	index = [0,  1,  2,  3,  4,  5,  6]
+	milestone = [0,  1,  2,  3,  4,  5,  6]
+	for i in range( len(index) ):
+		line1.line.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
+	
+	# Add Stations to Line 2
+	#
+	# 7 -  2 - 4 - 8 - 9
+	index = [7,  2,  4,  8,  9]
+	milestone = [0,  2,  5,  6,  7]
+	for i in range( len(index) ):
+		line2.line.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
+	
+	# Add station to timetable
+	timetable.line_list.append(line1)
+	timetable.line_list.append(line2)
+	
+	
+	print('All Stations')
+	for i in timetable.all_station_list:
+		print(i.name, i.id)
+	print('-'*20)
+	print('All Lines')
 	for i in timetable.line_list:
-		print (i.name)
+		print(i.name)
+		for j in i.line:
+			print(' ', j.station.name, j.milestone)
 	pass
 	
 
