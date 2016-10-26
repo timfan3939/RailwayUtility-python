@@ -9,24 +9,24 @@ class RUTTNodeType (Enum):
 	RUTTUnknown = 0x05
 	
 class RUTTNode:
-	def __init__(self, this_station, this_train, time_stamp, node_type):
-		self.this_station = this_station
-		self.this_train = this_train
+	def __init__(self, station, train, time_stamp, node_type):
+		self.station = station
+		self.train = train
 		self.time_stamp = time_stamp
 		self.node_type = node_type
 	
 	def __str__(self):
-		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.this_station, self.this_train, self.time_stamp, self.node_Type)
+		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.station, self.train, self.time_stamp, self.node_Type)
 		
 	def __lt__(self, other):
-		if self.this_train.id != other.this_train.id:
+		if self.train.id != other.train.id:
 			return self.time_stamp < other.time_stamp
-		return self.this_train.id < other.this_train.id
+		return self.train.id < other.train.id
 	
 	def __le__(self, other):
-		if self.this_train.id != other.this_train.id:
+		if self.train.id != other.train.id:
 			return self.time_stamp <= other.time_stamp
-		return self.this_train.id <= other.this_train.id
+		return self.train.id <= other.train.id
 	
 	def __eq__(self, other):
 		return (self <= other and self >= other)
@@ -35,14 +35,14 @@ class RUTTNode:
 		return not self == other
 	
 	def __gt__(self, other):
-		if self.this_train.id != other.this_train.id:
+		if self.train.id != other.train.id:
 			return self.time_stamp > other.time_stamp
-		return self.this_train.id > other.this_train.id
+		return self.train.id > other.train.id
 	
 	def __ge__(self, other):
-		if self.this_train.id != other.this_train.id:
+		if self.train.id != other.train.id:
 			return self.time_stamp >= other.time_stamp
-		return self.this_train.id >= other.this_train.id
+		return self.train.id >= other.train.id
 		
 	
 class RUTTStationNode:
