@@ -1,4 +1,5 @@
 from enum import Enum
+from operator import attrgetter
 
 class RUTTNodeType (Enum):
 	RUTTArrival = 0x01
@@ -16,6 +17,33 @@ class RUTTNode:
 	
 	def __str__(self):
 		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.this_station, self.this_train, self.time_stamp, self.node_Type)
+		
+	def __lt__(self, other):
+		if self.this_train.id != other.this_train.id:
+			return self.time_stamp < other.time_stamp
+		return self.this_train.id < other.this_train.id
+	
+	def __le__(self, other):
+		if self.this_train.id != other.this_train.id:
+			return self.time_stamp <= other.time_stamp
+		return self.this_train.id <= other.this_train.id
+	
+	def __eq__(self, other):
+		return (self <= other and self >= other)
+	
+	def __ne__(self, other):
+		return not self == other
+	
+	def __gt__(self, other):
+		if self.this_train.id != other.this_train.id:
+			return self.time_stamp > other.time_stamp
+		return self.this_train.id > other.this_train.id
+	
+	def __ge__(self, other):
+		if self.this_train.id != other.this_train.id:
+			return self.time_stamp >= other.time_stamp
+		return self.this_train.id >= other.this_train.id
+		
 	
 class RUTTStationNode:
 	def __init__ (self, name, id):
@@ -63,8 +91,12 @@ def main():
 	# Create Lines and Stations
 	line = RULineListNode('主線')
 	timetable.line_list.append(line)
+	line.
 	
 	print (timetable.line_list)
+	for i in timetable.line_list:
+		print (i.name)
+	pass
 	
 
 if __name__ == '__main__':
