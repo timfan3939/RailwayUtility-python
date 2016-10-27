@@ -82,6 +82,10 @@ class RUTimeTable:
 		self.all_station_list = []
 		self.all_train_list = []
 	
+	# TODO: Add following functions
+	# def AddNode
+	# def StartBulkAddNode
+	# def StopBulkAddNode
 
 
 def main():
