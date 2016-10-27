@@ -58,7 +58,7 @@ class RUTTStationNode:
 class RUTTTrainNode:
 	def __init__ (self, id):
 		self.id = id
-		self.schedule = []
+		self.schedules = []
 		self.operate_days = ''
 		self.departure_station = None
 		self.destination_station = None
@@ -74,7 +74,7 @@ class RULineStationListNode:
 class RULineListNode:
 	def __init__ (self, name):
 		self.name = name
-		self.line = []
+		self.line_stations = []
 
 class RUTimeTable:
 	def __init__ (self):
@@ -94,7 +94,7 @@ def main():
 	
 	# Create 10 Stations
 	for i in range(10):
-		newStation = RUTTStationNode( str.format('Station{}', i), 100 + i )
+		newStation = RUTTStationNode( str.format('SN {}', i), 100 + i )
 		timetable.all_station_list.append(newStation)
 	
 	timetable.all_station_list.sort(key=attrgetter('id') )
@@ -109,7 +109,7 @@ def main():
 	index = [0,  1,  2,  3,  4,  5,  6]
 	milestone = [0,  1,  2,  3,  4,  5,  6]
 	for i in range( len(index) ):
-		line1.line.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
+		line1.line_stations.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
 	
 	# Add Stations to Line 2
 	#
@@ -117,7 +117,7 @@ def main():
 	index = [7,  2,  4,  8,  9]
 	milestone = [0,  2,  5,  6,  7]
 	for i in range( len(index) ):
-		line2.line.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
+		line2.line_stations.append( RULineStationListNode(timetable.all_station_list[index[i]], milestone[i] ) )
 	
 	# Add station to timetable
 	timetable.line_list.append(line1)
@@ -127,11 +127,11 @@ def main():
 	# Test case Train added first
 	for i in range(1, 10, 2):
 		train = RUTTTrainNode( str.format('10{}', i) )
-		for j in range( len(line1.line) ):
+		for j in range( len(line1.line_stations) ):
 			if j != 0:
-				train.schedule.append( RUTTNode( line1.line[j], train,  300+30*i+3*j, RUTTNodeType.RUTTArrival ) )
-			if j != len(line1.line):
-				train.schedule.append( RUTTNode( line1.line[j], train, 300+30*i+3*j+1, RUTTNodeType.RUTTDeparture ) )
+				train.schedules.append( RUTTNode( line1.line_stations[j], train,  300+30*i+3*j, RUTTNodeType.RUTTArrival ) )
+			if j != len(line1.line_stations):
+				train.schedules.append( RUTTNode( line1.line_stations[j], train, 300+30*i+3*j+1, RUTTNodeType.RUTTDeparture ) )
 		timetable.all_train_list.append(train)
 	
 	# TODO: transfer train's schedule to station's schedule
@@ -144,14 +144,14 @@ def main():
 	print('All Lines')
 	for i in timetable.line_list:
 		print(i.name)
-		for j in i.line:
+		for j in i.line_stations:
 			print(' ', j.station.name, j.milestone)
 	
 	print('-'*20)
 	print('All Train')
 	for i in timetable.all_train_list:
 		print('Train No.', i.id)
-		for j in i.schedule:
+		for j in i.schedules:
 			print ( j.station.station.name, j.time_stamp )
 		print()
 	pass
