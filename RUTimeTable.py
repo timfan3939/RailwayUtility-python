@@ -81,12 +81,30 @@ class RUTimeTable:
 		self.line_list = []
 		self.all_station_list = []
 		self.all_train_list = []
+		self.sort_on_node_added = True
 	
-	# TODO: Add following functions
-	# def AddNode
-	# def StartBulkAddNode
-	# def StopBulkAddNode
-
+	def StartBulkAddNode(self):
+		self.sort_on_node_added = False
+	
+	def StopBulkAddNode(self):
+		for station in self.all_station_list:
+			station.schedules.sort()
+		for train in self.all_train_list:
+			train.schedules.sort()
+		self.sort_on_node_added = True
+	
+	def AddTTNode(self, station, train, time_stamp, type):
+		node = (station, train, time_stamp, type)
+		train.schedules.append(node)
+		station.schedules.append(node)
+		if self.sort_on_node_added:
+			train.schedules.sort()
+			station.schedules.sort()
+	
+	def FindTrain(self, id):
+		pass
+		# TODO here
+		
 
 def main():
 	# Create Time Table instance
