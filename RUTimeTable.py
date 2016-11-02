@@ -16,33 +16,25 @@ class RUTTNode:
 		self.node_type = node_type
 
 	def __str__(self):
-		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.station, self.train, self.time_stamp, self.node_Type)
+		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.station, self.train, self.time_stamp, self.node_type)
 
 	def __lt__(self, other):
-		if self.train.id != other.train.id:
-			return self.time_stamp < other.time_stamp
-		return self.train.id < other.train.id
+		return (self.time_stamp < other.time_stamp) or (self.train.id < other.train.id)
 
-	def __le__(self, other):
-		if self.train.id != other.train.id:
-			return self.time_stamp <= other.time_stamp
-		return self.train.id <= other.train.id
+	def __le__(self, other):		
+		return (self.time_stamp <= other.time_stamp) or (self.train.id <= other.train.id)
 
 	def __eq__(self, other):
-		return (self <= other and self >= other)
+		return (self.time_stamp == other.time_stamp) and (self.train.id == other.train.id)
 
 	def __ne__(self, other):
 		return not self == other
 
 	def __gt__(self, other):
-		if self.train.id != other.train.id:
-			return self.time_stamp > other.time_stamp
-		return self.train.id > other.train.id
+		return (self.time_stamp > other.time_stamp) or (self.train.id > other.train.id)
 
 	def __ge__(self, other):
-		if self.train.id != other.train.id:
-			return self.time_stamp >= other.time_stamp
-		return self.train.id >= other.train.id
+		return (self.time_stamp >= other.time_stamp) or (self.train.id >= other.train.id)
 
 
 class RUTTStationNode:
