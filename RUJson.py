@@ -25,20 +25,14 @@ from RUTimeTable import *
 #    |- DepTime
 #    |- ArrTime
 
-def LoadTRAJsonTimetable(filename, encoding = None):
+def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 	with open(filename, encoding = encoding) as inputJson:
 		data = json.load(inputJson)
-	stations = []
 	
 	for trainInfo in data['TrainInfos']:
 		for timeInfo in trainInfo['TimeInfos']:
-			if timeInfo['Station'] not in stations:
-				stations.append(timeInfo['Station'])
-			#print(trainInfo['Train'], timeInfo['Station'], timeInfo['DepTime'])
-		#print()
-		stations.sort()
-	for s in stations:
-		print(s)
+			print(trainInfo['Train'], timetable.station_dict_by_id[int(timeInfo['Station'])].name, timeInfo['DepTime'])
+		print()
 
 def LoadStation(timetable):
 	newLine = None
@@ -75,7 +69,6 @@ def LoadStation(timetable):
 
 def main():
 	m_timetable = RUTimeTable()
-	#LoadTRAJsonTimetable('file/20170913.json', encoding = 'utf8')
 	LoadStation(m_timetable)
 	
 	for l in m_timetable.line_list:
@@ -83,6 +76,8 @@ def main():
 		for s in l.line_stations:
 			print('    ', s)
 		print()
+		
+	LoadTRAJsonTimetable(m_timetable, 'file/20170913.json', encoding = 'utf8')
 
 if __name__ == '__main__':
 	main()

@@ -66,7 +66,7 @@ class RULineStationListNode:
 		self.milestone = milestone
 	
 	def __str__(self):
-		return str.format('{} {}',self.station.name, self.milestone)
+		return str.format('{} {} {}',self.station.id, self.station.name, self.milestone)
 
 class RULineListNode:
 	def __init__ (self, name):
