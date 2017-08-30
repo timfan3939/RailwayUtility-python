@@ -64,11 +64,17 @@ class RULineStationListNode:
 	def __init__ (self, station, milestone):
 		self.station = station
 		self.milestone = milestone
+	
+	def __str__(self):
+		return str.format('{} {}',self.station.name, self.milestone)
 
 class RULineListNode:
 	def __init__ (self, name):
 		self.name = name
 		self.line_stations = []
+	
+	def __str__(self):
+		return str.format('RULineListNode: {}', self.name)
 
 class RUTimeTable:
 	def __init__ (self):
@@ -95,7 +101,16 @@ class RUTimeTable:
 		if self.sort_on_node_added:
 			train.schedules.sort()
 			station.schedules.sort()
-
+	
+	def AddStation(self, name, id):
+		if id in self.station_dict_by_id:
+			return self.station_dict_by_id[id]
+		else:
+			newStation = RUTTStationNode(name, id)
+			self.all_station_list.append(newStation)
+			self.station_dict_by_id[id] = newStation
+			return newStation
+	
 	def FindTrain(self, id):
 		pass
 		# TODO here
