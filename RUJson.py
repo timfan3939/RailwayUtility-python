@@ -36,7 +36,7 @@ def LoadStation():
 	pass
 
 def main():
-	TRAJsonTimeTableLoader('file/20161106.json', encoding = 'utf8')
+	LoadTRAJsonTimetable('file/20170913.json', encoding = 'utf8')
 
 if __name__ == '__main__':
 	main()
