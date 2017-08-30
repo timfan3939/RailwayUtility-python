@@ -25,12 +25,18 @@ import RUTimeTable
 #    |- DepTime
 #    |- ArrTime
 
-def main():
-	with open('file/20161106.json', encoding='utf8') as inputJson:
+def LoadTRAJsonTimetable(filename, encoding = None):
+	with open(filename, encoding = encoding) as inputJson:
 		data = json.load(inputJson)
 	
 	for trainInfo in data['TrainInfos']:
 		print(trainInfo['Train'], trainInfo['Note'])
+
+def LoadStation():
+	pass
+
+def main():
+	TRAJsonTimeTableLoader('file/20161106.json', encoding = 'utf8')
 
 if __name__ == '__main__':
 	main()
