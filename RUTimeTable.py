@@ -21,7 +21,7 @@ class RUTTNode:
 		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.station, self.train, self.time_stamp, self.node_type)
 
 	def __lt__(self, other):
-		return (self.time_stamp < other.time_stamp) or (self.train.id < other.train.id)
+		return (self.time_stamp < other.time_stamp) 
 
 	def __le__(self, other):		
 		return (self.time_stamp <= other.time_stamp) or (self.train.id <= other.train.id)
@@ -59,6 +59,9 @@ class RUTTTrainNode:
 
 	def __str__ (self):
 		return str.format( 'RUTTTrainNode\n-\\{0}', self.id )
+		
+	def __lt__(self, other):
+		return (self.id < other.id)
 
 class RULineStationListNode:
 	def __init__ (self, station, milestone):
