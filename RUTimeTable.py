@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from enum import Enum
+from enum import IntEnum
 from operator import attrgetter
 
-class RUTTNodeType (Enum):
+class RUTTNodeType (IntEnum):
 	RUTTArrival = 0x01
 	RUTTDeparture = 0x02
 	RUTTBypass = 0x03
@@ -21,22 +21,30 @@ class RUTTNode:
 		return str.format('RUTTNode\n|- {0}\n|- {1}\n|- {2}\n\\- {3}', self.station, self.train, self.time_stamp, self.node_type)
 
 	def __lt__(self, other):
-		return (self.time_stamp < other.time_stamp) 
+		if self.time_stamp != other.time_stamp:
+			return (self.time_stamp < other.time_stamp)
+		elif self.train.id != other.train.id:
+			return (self.train.id < other.train.id)
+		else:
+			return self.node_type < other.node_type
 
 	def __le__(self, other):		
-		return (self.time_stamp <= other.time_stamp) or (self.train.id <= other.train.id)
+		return (self.time_stamp <= other.time_stamp)
 
 	def __eq__(self, other):
-		return (self.time_stamp == other.time_stamp) and (self.train.id == other.train.id)
+		return (self.time_stamp == other.time_stamp and
+				self.node_type == other.node_type and
+				self.station == other.station and
+				self.train == other.train)
 
 	def __ne__(self, other):
 		return not self == other
 
 	def __gt__(self, other):
-		return (self.time_stamp > other.time_stamp) or (self.train.id > other.train.id)
+		return (self.time_stamp > other.time_stamp)
 
 	def __ge__(self, other):
-		return (self.time_stamp >= other.time_stamp) or (self.train.id >= other.train.id)
+		return (self.time_stamp >= other.time_stamp)
 
 
 class RUTTStationNode:
