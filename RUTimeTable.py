@@ -120,11 +120,7 @@ class RUTimeTable:
 			newStation = RUTTStationNode(name, id)
 			self.all_station_list.append(newStation)
 			self.station_dict_by_id[id] = newStation
-			return newStation
-	
-	def FindTrain(self, id):
-		pass
-		# TODO here
+			return newStation	
 
 
 def main():
