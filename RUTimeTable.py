@@ -57,6 +57,9 @@ class RUTTStationNode:
 
 	def __str__(self):
 		return str.format('RUTTStationNode\n|- {0}\n\\- {1}', self.name, self.id)
+	
+	def sortSchedules(self):
+		self.schedules.sort()
 
 class RUTTTrainNode:
 	def __init__ (self, id):
@@ -71,6 +74,20 @@ class RUTTTrainNode:
 		
 	def __lt__(self, other):
 		return (self.id < other.id)
+	
+	def sortSchedules(self):
+		self.schedules.sort()
+		if self.source_station is not None:
+			if self.schedules[0].station != self.source_station:
+				print('sort', self.id)
+				while True:
+					if len(self.schedules) == 0:
+						print('Train ', self.id, 'has wrong source station.')
+						break
+					if self.schedules[0].station == self.source_station:
+						break
+					self.schedules.append(self.schedules.pop(0))
+				
 
 class RULineStationListNode:
 	def __init__ (self, station, milestone):
@@ -102,17 +119,17 @@ class RUTimeTable:
 	
 	def SortAllNode(self):
 		for station in self.all_station_list:
-			station.schedules.sort()
+			station.sortSchedules()
 		for train in self.all_train_list:
-			train.schedules.sort()
+			train.sortSchedules()
 
-	def AddTTNode(self, station, train, time_stamp, type):
-		node = (station, train, time_stamp, type)
-		train.schedules.append(node)
-		station.schedules.append(node)
-		if self.sort_on_node_added:
-			train.schedules.sort()
-			station.schedules.sort()
+#	def AddTTNode(self, station, train, time_stamp, type):
+#		node = (station, train, time_stamp, type)
+#		train.schedules.append(node)
+#		station.schedules.append(node)
+#		if self.sort_on_node_added:
+#			train.schedules.sort()
+#			station.schedules.sort()
 	
 	def AddStation(self, name, id):
 		if id in self.station_dict_by_id:

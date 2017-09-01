@@ -53,9 +53,9 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 			
 			
 			if int(timeInfo['Order']) == 1:
-				newTrain.sourceStation = station
+				newTrain.source_station = station
 			elif int(timeInfo['Order']) == timeInfosLen:
-				newTrain.destinationStation = station
+				newTrain.destination_station = station
 			
 			try:
 				arrTime = datetime.strptime(timeInfo['ArrTime'],'%H:%M:%S')
@@ -136,10 +136,10 @@ def main():
 	LoadTRAJsonTimetable(m_timetable, 'file/20170913.json', encoding = 'utf8')
 	
 	m_timetable.all_train_list.sort()
+	m_timetable.SortAllNode()
 	for train in m_timetable.all_train_list:
-		print('第{}次:'.format(train.id))
+		print('第{}次 {} 往 {}'.format(train.id, train.source_station.name, train.destination_station.name))
 		
-		train.schedules.sort()
 		
 		for time in train.schedules:
 			print('    {} {}'.format(time.station.name, time.time_stamp))
@@ -147,7 +147,6 @@ def main():
 	
 	for station in m_timetable.all_station_list:
 		print('{}車站時刻表'.format(station.name))
-		station.schedules.sort()
 		for time in station.schedules:
 			print('    {:4} - {}'.format(time.train.id, time.time_stamp))
 		print()
