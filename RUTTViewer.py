@@ -198,7 +198,7 @@ def main():
 	
 	while True:
 		refreshWithNode(currentNode, testSize, type)
-		line = input( '\n\nw a s d for moving, q for leaving: ')
+		line = input( '\n\nw a s d for moving, q for leaving, f for flipping: ')
 		if line != '':
 			c = line[0]
 		else:

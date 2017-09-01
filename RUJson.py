@@ -2,7 +2,7 @@
 
 import json
 from RUTimeTable import *
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 
 # TrainInfos
 # |- Type
@@ -37,7 +37,7 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 			
 		for timeInfo in trainInfo['TimeInfos']:	
 			arrTime = None
-			DepTime = None
+			depTime = None
 			stationId = None
 			station = None
 			
@@ -51,18 +51,24 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 			station = timetable.station_dict_by_id[stationID]
 			
 			try:
-				arrTime = datetime.strptime(timeInfo['ArrTime'],'%H:%M:%S').time()
+				arrTime = datetime.strptime(timeInfo['ArrTime'],'%H:%M:%S')
 			except ValueError:
 				print('ArrTime Error at Train {} and Station {}({}): {}'.format(newTrain.id, station.name, station.id, timeInfo['ArrTime']))
 				print('ArrTime set to None')
 				arrTime = None
 			
 			try:
-				depTime = datetime.strptime(timeInfo['DepTime'],'%H:%M:%S').time()
+				depTime = datetime.strptime(timeInfo['DepTime'],'%H:%M:%S')
 			except ValueError:
 				print('depTime Error at Train {} and Station {}({}): {}'.format(newTrain.id, station.name, station.id, timeInfo['DepTime']))
 				print('Deptime set to None')
 				depTime = None
+			
+			if arrTime == depTime:
+				depTime = depTime + timedelta(seconds = 30)
+			
+			arrTime = arrTime.time()
+			depTime = depTime.time()
 				
 			arrTTnode = RUTTNode(station, newTrain, arrTime, RUTTNodeType.RUTTArrival)
 			depTTnode = RUTTNode(station, newTrain, depTime, RUTTNodeType.RUTTDeparture)
