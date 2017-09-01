@@ -5,10 +5,11 @@ from operator import attrgetter
 
 class RUTTNodeType (IntEnum):
 	RUTTArrival = 0x01
-	RUTTDeparture = 0x02
+	RUTTStopOnly = 0x02
 	RUTTBypass = 0x03
-	RUTTStopOnly = 0x04
+	RUTTDeparture = 0x04
 	RUTTUnknown = 0x05
+
 
 class RUTTNode:
 	def __init__(self, station, train, time_stamp, node_type):
