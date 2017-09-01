@@ -34,12 +34,13 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 		id = trainInfo['Train']
 					
 		newTrain = RUTTTrainNode(id)
+		timeInfosLen = len(trainInfo['TimeInfos'])
 			
 		for timeInfo in trainInfo['TimeInfos']:	
 			arrTime = None
 			depTime = None
 			stationId = None
-			station = None
+			station = None			
 			
 			try:
 				stationID = int(timeInfo['Station'])
@@ -49,6 +50,12 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 				continue
 			
 			station = timetable.station_dict_by_id[stationID]
+			
+			
+			if int(timeInfo['Order']) == 1:
+				newTrain.sourceStation = station
+			elif int(timeInfo['Order']) == timeInfosLen:
+				newTrain.destinationStation = station
 			
 			try:
 				arrTime = datetime.strptime(timeInfo['ArrTime'],'%H:%M:%S')

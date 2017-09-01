@@ -63,7 +63,7 @@ class RUTTTrainNode:
 		self.id = id
 		self.schedules = []
 		self.operate_days = ''
-		self.departure_station = None
+		self.source_station = None
 		self.destination_station = None
 
 	def __str__ (self):
