@@ -23,6 +23,8 @@ from datetime import time
 #                到達          到達          到達
 #
 #
+# type = 1 ： 王
+# type = 2 ： 卅
 	
 def printNodes(TTNodes, size, type = 1):
 		mid = int(size/2)
@@ -136,8 +138,6 @@ def refreshWithNode(ttnode, size, type = 1):
 				if j == 0 or t_seq + j < 0 or t_seq + j >= len(t_schedules):
 					continue
 				result[ (mid + i) * size + (mid + j) ] = t_schedules[ t_seq + j ]
-		
-	
 	else:
 		schedules = ttnode.station.schedules
 		seq = schedules.index(ttnode)
@@ -159,10 +159,6 @@ def refreshWithNode(ttnode, size, type = 1):
 				if i == 0 or t_seq + i < 0 or t_seq + i >= len(t_schedules):
 					continue
 				result[ (mid + i) * size + (mid + j) ] = t_schedules[ t_seq + i ]
-			
-			
-			
-	
 	
 	printNodes(result, size, type)
 	
@@ -234,9 +230,6 @@ def main():
 		else:
 			pass
 			
-			
-	
-
 	
 if __name__ == '__main__':
 	main()
