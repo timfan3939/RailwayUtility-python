@@ -34,6 +34,8 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 		id = trainInfo['Train']
 					
 		newTrain = RUTTTrainNode(id)
+		newTrain.direction = trainInfo['LineDir']
+		
 		timeInfosLen = len(trainInfo['TimeInfos'])
 			
 		for timeInfo in trainInfo['TimeInfos']:	

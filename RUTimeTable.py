@@ -68,6 +68,7 @@ class RUTTTrainNode:
 		self.operate_days = ''
 		self.source_station = None
 		self.destination_station = None
+		self.direction = None
 
 	def __str__ (self):
 		return str.format( 'RUTTTrainNode\n-\\{0}', self.id )
@@ -79,7 +80,6 @@ class RUTTTrainNode:
 		self.schedules.sort()
 		if self.source_station is not None:
 			if self.schedules[0].station != self.source_station:
-				print('sort', self.id)
 				while True:
 					if len(self.schedules) == 0:
 						print('Train ', self.id, 'has wrong source station.')

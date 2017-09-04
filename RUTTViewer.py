@@ -23,15 +23,15 @@ from datetime import time
 #                到達          到達          到達
 #
 #
-# type = 1 ： 王
-# type = 2 ： 卅
+# viewerType = 1 ： 王
+# viewerType = 2 ： 卅
 	
-def printNodes(TTNodes, size, type = 1):
+def printNodes(TTNodes, size, viewerType = 1):
 		mid = int(size/2)
 		
 		# print train no header
 		output = ' ' * 8
-		if type == 1:
+		if viewerType == 1:
 			output += '          ' * size
 		else:
 			for i in range(size):
@@ -44,7 +44,7 @@ def printNodes(TTNodes, size, type = 1):
 		
 			if i == 0:
 				print()
-			elif type == 1:
+			elif viewerType == 1:
 				output = ' ' * 8
 				for j in range(size):
 					if j == int(size/2) :
@@ -60,7 +60,7 @@ def printNodes(TTNodes, size, type = 1):
 		
 		
 			output = ' ' * 8
-			if type == 1:
+			if viewerType == 1:
 				for j in range(size):
 					output += '  {:>5} 次'.format(TTNodes[i*size+j].train.id)
 			else:
@@ -78,7 +78,7 @@ def printNodes(TTNodes, size, type = 1):
 			print(output)
 			
 			
-			if type == 1:
+			if viewerType == 1:
 				if len(TTNodes[i*size+mid].station.name) == 1:
 					output =  '{:>7}'.format(TTNodes[i*size+mid].station.name)
 				elif len(TTNodes[i*size+mid].station.name) == 2:
@@ -93,7 +93,7 @@ def printNodes(TTNodes, size, type = 1):
 				output = ' ' * 8
 					
 			for j in range(size):
-				if (i == int(size/2) or type == 1) and j != 0:
+				if (i == int(size/2) or viewerType == 1) and j != 0:
 					output += '--{:>8s}'.format(TTNodes[i*size+j].time_stamp.__str__())			
 				else:
 					output += '  {:>8s}'.format(TTNodes[i*size+j].time_stamp.__str__())			
@@ -111,42 +111,108 @@ def printNodes(TTNodes, size, type = 1):
 			
 emptyNode = RUTTNode( RUTTStationNode('        ', '        '), RUTTTrainNode('    '), time(), RUTTNodeType.RUTTUnknown)
 			
-def refreshWithNode(ttnode, size, type = 1):
+def refreshWithNode(ttnode, size, viewerType = 1, directionType = 1):
 
 	result = [emptyNode] * (size*size)	
 	mid = int(size/2)	
 	result[mid * size + mid] = ttnode
 	
-	if type == 1:
+	if viewerType == 1:
 		schedules = ttnode.train.schedules
 		seq = schedules.index(ttnode)
 		
+		# center toward top
+		offset = 0
+		step = 1
+		while step <= mid:
+			offset -= 1
+			if seq + offset < 0:
+				break
+			result[ (mid-step) * size + mid ] = schedules[seq + offset]
+			step += 1
+		
+		# center toward bottom
+		offset = 0
+		step = 1
+		while step <= mid:
+			offset += 1
+			if seq + offset >= len(schedules):
+				break
+			result[ (mid+step) * size + mid ] = schedules[seq + offset]
+			step += 1
+		
+		# Horizontal nodes expansion
 		for i in range(-mid, mid+1):
-			if i == 0 or seq + i < 0 or seq + i >= len(schedules):
-				continue
-			result[ (mid + i) * size + mid ] = schedules[seq + i]
-					
-		for i in range(-mid, mid+1):
-			t_node = result[ (mid + i) * size + mid ]
-			if t_node is emptyNode:
+			print('i =', i)
+			c_node = result[ (mid+i) * size + mid ]
+			if c_node is emptyNode:
 				continue
 				
-			t_schedules = t_node.station.schedules
-			t_seq = t_schedules.index(t_node)
-						
-			for j in range(-mid, mid+1):
-				if j == 0 or t_seq + j < 0 or t_seq + j >= len(t_schedules):
+			t_schedules = c_node.station.schedules
+			t_seq = t_schedules.index(c_node)
+			
+			# Left Horizontal node expansion
+			offset = 0
+			step = 1
+			while step <= mid:
+				offset -= 1
+				if t_seq + offset < 0:
+					break
+				print('({},{}), offset = {}'.format(mid+i, mid-step, offset))
+				print(c_node.train.id, t_schedules[t_seq + offset].train.id)
+				if directionType == 2 and c_node.train.direction != t_schedules[t_seq + offset].train.direction:
+					print(c_node.train.id, '!=' , t_schedules[t_seq + offset].train.id)
 					continue
-				result[ (mid + i) * size + (mid + j) ] = t_schedules[ t_seq + j ]
+				result[ (mid+i) * size + (mid - step) ] = t_schedules[t_seq + offset]
+				step += 1
+			
+			offset = 0
+			step = 1
+			while step <= mid:
+				offset += 1
+				if t_seq + offset >= len(t_schedules):
+					break
+				print('({},{}), offset = {}'.format(mid+i, mid+step, offset))
+				print(c_node.train.id, t_schedules[t_seq + offset].train.id)
+				if directionType == 2 and c_node.train.direction != t_schedules[t_seq + offset].train.direction:
+					print(c_node.train.id, '!=' , t_schedules[t_seq + offset].train.id)
+					continue
+				result[ (mid+i) * size + (mid + step) ] = t_schedules[t_seq + offset]
+				step += 1		
+		
 	else:
 		schedules = ttnode.station.schedules
 		seq = schedules.index(ttnode)
 		
-		for j in range(-mid, mid+1):
-			if j == 0 or seq + j < 0 or seq + j >= len(schedules):
-				continue
-			result[ (mid + j) + size * mid ] = schedules[seq + j]
 		
+		# Center toward left
+		offset = 0
+		step = 1
+		while step <= mid:
+			offset -= 1
+			if seq + offset < 0:
+				break
+			if directionType == 2 and ttnode.train.direction != schedules[seq + offset].train.direction:
+				continue
+			result[ (mid - step) + size * mid] = schedules[seq + offset]
+			print('( {}, {} )'.format(mid-step, mid))
+			step +=1 
+		
+		# Center toward right
+		offset = 0
+		step = 1
+		while step <= mid:
+			offset += 1
+			if seq + offset >= len(schedules):
+				break
+			if directionType == 2 and ttnode.train.direction != schedules[seq + offset].train.direction:
+				continue
+			result[ (mid + step) + size * mid] = schedules[seq + offset]
+			print('( {}, {} )'.format(mid+step, mid))
+			step += 1
+		
+	
+	
 		for j in range(-mid, mid+1):
 			t_node = result[ (mid + j) + size * mid ]
 			if t_node is emptyNode:
@@ -160,7 +226,7 @@ def refreshWithNode(ttnode, size, type = 1):
 					continue
 				result[ (mid + i) * size + (mid + j) ] = t_schedules[ t_seq + i ]
 	
-	printNodes(result, size, type)
+	printNodes(result, size, viewerType)
 	
 	
 ####################
@@ -190,10 +256,14 @@ def main():
 		return
 	
 	currentNode = train.schedules[5]
-	type = 1
+	viewerType = 1
+	
+	# 1 = don't caire
+	# 2 = same as currentNode
+	directionType = 1
 	
 	while True:
-		refreshWithNode(currentNode, testSize, type)
+		refreshWithNode(currentNode, testSize, viewerType, directionType)
 		line = input( '\n\nw a s d for moving, q for leaving, f for flipping: ')
 		if line != '':
 			c = line[0]
@@ -226,7 +296,9 @@ def main():
 		elif c == 'q':
 			break
 		elif c == 'f':
-			type = 2 if type == 1 else 1
+			viewerType = 2 if viewerType == 1 else 1
+		elif c == 'x':
+			directionType = 2 if directionType == 1 else 1
 		else:
 			pass
 			
