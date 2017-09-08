@@ -1,23 +1,68 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#coding=utf-8
+
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 import cgi
 
 import cgitb
-cgitb.enable()
+#cgitb.enable(display = 0, logdir = '/var/log/RUTT/', format='txt')
+cgitb.enable(display = 0, logdir = '/home/timfan3939/log/', format='txt')
+
+from RUJson import *
+from RUTimeTable import *
+from datetime import time
+
+_ = '一'
 
 def main():
-	print('Content-Type: text/html\n\n')
+	print('<head><title>Look up timetable</title></head>')
 
 	form  = cgi.FieldStorage()
-	if 'name' not in form or 'addr' not in form:
-		print('<H1>Error</H1>')
-		print('Name or Address do not exist in form')
+	if 'id' not in form:
+		print('<H1>ID is not given</H1>')
 		return
+	
+	print('nothing<br />')
 
-	print('Name: {}<br />'.format(form['name'].value))
-	print('Address: {}<br />'.format(form['addr'].value))
+	timetable = RUTimeTable()
+	
+	LoadStation( timetable )
+	LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
+	timetable.SortAllNode()
+
+
+	trainID = form['id'].value
+	if trainID not in timetable.all_train_list:
+		print('<H1> Train No. {} does not exists.</H1>'.format(trainID))
+#		return
+
+#	train = timetable.all_train_list['trainID']
+	train = timetable.all_train_list[1]
+	
+	print('Train No. {}<br />'.format(train.id))
+	print('<table>')
+	print('<thead><tr><th>Station</th><th>Arrival</th><th>Departure</th></tr></thead>')
+	print('<tbody>')
+
+	i = 0
+	while i < len(train.schedules):
+		print('<tr><td>{}</td><td>{}</td><td></td></tr>'.format( train.schedules[i].station.name, train.schedules[i].time_stamp ))
+	
+		i += 1
+
+	print('</tbody>')
+	print('</table>')
+	print('End of execution<br />')
+
+
 
 if __name__ == '__main__':
+	print('Content-Type: text/html; charset=utf-8 \n\n')
+	print('<meta charset="utf-8" />')
 	main()
 
 
