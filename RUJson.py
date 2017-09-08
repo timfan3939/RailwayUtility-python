@@ -33,7 +33,7 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 	for trainInfo in data['TrainInfos']:
 		id = trainInfo['Train']
 					
-		newTrain = RUTTTrainNode(id)
+		newTrain = timetable.AddTrain(id)
 		newTrain.direction = trainInfo['LineDir']
 		
 		timeInfosLen = len(trainInfo['TimeInfos'])
@@ -89,7 +89,6 @@ def LoadTRAJsonTimetable(timetable, filename, encoding = None):
 			
 			#print(trainInfo['Train'], station.name, arrTime, '->', depTime)
 		#print()
-		timetable.all_train_list.append(newTrain)
 		newTrain = None
 
 def LoadStation(timetable):

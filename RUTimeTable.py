@@ -112,6 +112,7 @@ class RUTimeTable:
 		self.all_train_list = []
 		self.station_dict_by_id = {}
 		self.station_dict_by_name = {}
+		self.train_dict_by_id = {}
 		
 	def UpdateStationDict(self):
 		self.station_dict_by_id		= { s.id : s for s in self.all_station_list }
@@ -139,6 +140,16 @@ class RUTimeTable:
 			self.all_station_list.append(newStation)
 			self.station_dict_by_id[id] = newStation
 			return newStation	
+	
+	def AddTrain(self, id):
+		if id in self.train_dict_by_id:
+			return self.train_dict_by_id[id]
+		else:
+			newTrain = RUTTTrainNode(id)
+			self.all_train_list.append(newTrain)
+			self.train_dict_by_id[id] = newTrain
+			return newTrain
+		
 
 
 def main():
