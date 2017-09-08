@@ -25,8 +25,6 @@ def main():
 	if 'id' not in form:
 		print('<H1>ID is not given</H1>')
 		return
-	
-	print('nothing<br />')
 
 	timetable = RUTimeTable()
 	
@@ -36,28 +34,37 @@ def main():
 
 
 	trainID = form['id'].value
-	if trainID not in timetable.all_train_list:
+	if trainID not in timetable.train_dict_by_id:
 		print('<H1> Train No. {} does not exists.</H1>'.format(trainID))
-#		return
+		return
+	
+	train = timetable.train_dict_by_id[trainID]
+	
 
-#	train = timetable.all_train_list['trainID']
-	train = timetable.all_train_list[1]
 	
 	print('Train No. {}<br />'.format(train.id))
 	print('<table>')
-	print('<thead><tr><th>Station</th><th>Arrival</th><th>Departure</th></tr></thead>')
+	print('<thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead>'.format('車站', '抵達時間', '開車時間'))
 	print('<tbody>')
 
 	i = 0
 	while i < len(train.schedules):
-		print('<tr><td>{}</td><td>{}</td><td></td></tr>'.format( train.schedules[i].station.name, train.schedules[i].time_stamp ))
-	
+		node = train.schedules[i]
 		i += 1
+
+		if node.node_type == RUTTNodeType.RUTTArrival or node.node_type == RUTTNodeType.RUTTStopOnly:
+			if i < len(train.schedules) and train.schedules[i].station == node.station:
+				node2 = train.schedules[i]
+				i += 1
+				print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp ))
+			else:
+				print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, ''))
+		else:
+			print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, '', node.time_stamp))
+	
 
 	print('</tbody>')
 	print('</table>')
-	print('End of execution<br />')
-
 
 
 if __name__ == '__main__':
