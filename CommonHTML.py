@@ -20,7 +20,7 @@ def printForm(timetable = None):
 		selection += '<option value="{}">{}: {}</option>'.format(station.id, station.id, station.name)
 
 	content = ''
-	content += '<form method="POST" action="RunningTime.cgi">'
+	content += '<form method="POST" action="lookupBySta2Sta.cgi">'
 	content += '<fieldset><legend>起迄站</legend>'
 	content += '起始站：<select name="sta1">'
 	content += selection
@@ -34,7 +34,7 @@ def printForm(timetable = None):
 	
 	content += '<p />'
 
-	content += '<form method="POST" action="lookup.cgi">'
+	content += '<form method="POST" action="lookupByTrainID.cgi">'
 	content += '<fieldset><legend>以車次查詢</legend>'
 	content += '車次：<input name="id" /><br /><input type="submit" value="送出" />'
 	content += '</fieldset>'
