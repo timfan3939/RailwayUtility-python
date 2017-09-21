@@ -24,6 +24,8 @@ def printMeta():
 	pass
 
 def main():
+	printHead()
+	print( '<body>' )
 	print( '<h1>RailwayUtility Python</h1>' )
 
 	timetable = RUTimeTable()
@@ -34,10 +36,13 @@ def main():
 
 	printForm( timetable )
 	
-	print( '<ol>' )
+	print( '<ul>' )
 	print( '<li><a href="../transport.html">Please Go Here for main site</a></li>' )
 	print( '<li><a href="../ganglia/">System Info Monitored by Ganglia</a></li>' )
-	print( '</ol>' )
+	print( '</ul>' )
+	
+	
+	print( '</body>' )
 
 
 if __name__ == '__main__':	
