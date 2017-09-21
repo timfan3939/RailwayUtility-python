@@ -20,6 +20,17 @@ from CommonHTML import *
 
 _ = '一'
 
+
+def printHead():
+	print( '<head><title>RailwayUtility Python</title>' )
+	printMeta()
+	print( '</head>' )
+
+def printMeta():
+	print( '<meta charset="utf-8" \> ')
+	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
+
+
 def main():
 	print('<head><title>Look up timetable</title>')
 	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
@@ -74,8 +85,6 @@ def main():
 
 
 if __name__ == '__main__':
-	print('Content-Type: text/html; charset=utf-8 \n\n')
-	print('<meta charset="utf-8" />')
+	print('Content-Type: text/html; charset=utf-8\n')
+	printHead()
 	main()
-
-

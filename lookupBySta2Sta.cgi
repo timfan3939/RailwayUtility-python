@@ -20,7 +20,17 @@ from CommonHTML import *
 
 _ = '一'
 
+def printHead():
+	print( '<head><title>RailwayUtility Python</title>' )
+	printMeta()
+	print( '</head>' )
+
+def printMeta():
+	print( '<meta charset="utf-8" \> ')
+	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
+
 def main():
+	print( '<body' )
 	timetable = RUTimeTable()
 	
 	LoadStation( timetable )
@@ -57,12 +67,13 @@ def main():
 	table += '</tbody></table>'
 
 	print(table)
+	
+	print( '</body>' )
 
 	
 	
 
 if __name__ == '__main__':
 	print('Content-Type: text/html; charset=utf-8\n')
-	print('<meta charset="utf-8">')
-	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
+	printHead()
 	main()

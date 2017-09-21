@@ -16,15 +16,12 @@ def printHead():
 	print( '<head><title>RailwayUtility Python</title>' )
 	printMeta()
 	print( '</head>' )
-	pass
 
 def printMeta():
 	print( '<meta charset="utf-8" \> ')
 	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
-	pass
 
 def main():
-	printHead()
 	print( '<body>' )
 	print( '<h1>RailwayUtility Python</h1>' )
 
@@ -47,4 +44,5 @@ def main():
 
 if __name__ == '__main__':	
 	print( 'Content-Type: text/html; charset=utf-8\n' )
+	printHead()
 	main()
