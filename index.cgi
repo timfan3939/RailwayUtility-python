@@ -12,19 +12,34 @@ cgitb.enable()
 
 from CommonHTML import *
 
-print( 'Content-Type: text/html\n\n' )
-print( '<meta charset="utf8" />')
-print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
-print( 'Hello World!<br/>' )
+def printHead():
+	print( '<head><title>RailwayUtility Python</title>' )
+	printMeta()
+	print( '</head>' )
+	pass
 
-timetable = RUTimeTable()
+def printMeta():
+	print( '<meta charset="utf-8" \> ')
+	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
+	pass
+
+def main():
+	print( '<h1>RailwayUtility Python</h1>' )
+
+	timetable = RUTimeTable()
+		
+	LoadStation( timetable )
+	LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
+	timetable.SortAllNode()
+
+	printForm( timetable )
 	
-LoadStation( timetable )
-LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
-timetable.SortAllNode()
+	print( '<ol>' )
+	print( '<li><a href="../transport.html">Please Go Here for main site</a></li>' )
+	print( '<li><a href="../ganglia/">System Info Monitored by Ganglia</a></li>' )
+	print( '</ol>' )
 
-printForm( timetable )
 
-print('<h1><a href="../transport.html">Please Go Here for main site</a></h1><br />')
-print('<h2><a href="../ganglia/">System Info Monitored by Ganglia</a></h2><br />')
-
+if __name__ == '__main__':	
+	print( 'Content-Type: text/html; charset=utf-8\n' )
+	main()
