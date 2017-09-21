@@ -16,6 +16,8 @@ from RUJson import *
 from RUTimeTable import *
 from datetime import time
 
+from CommonHTML import *
+
 _ = '一'
 
 def main():
@@ -40,7 +42,7 @@ def main():
 	station2 = timetable.station_dict_by_id[ sta2 ]
 	
 	table = ''
-	table += '<table><thead><th>車次</th><th>{}</th><th>--></th><th>{}</th></thead><tbody>'.format(station1.name, station2.name)
+	table += '<table><thead><th>車次</th><th>{}</th><th>--></th><th>{}</th><th>{}</th></thead><tbody>'.format(station1.name, station2.name, '行駛時間')
 
 	
 	for node in station1.schedules:
@@ -51,35 +53,16 @@ def main():
 			if node2.train.id == train.id and \
 			   node2.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTBypass} and \
 			   train.schedules.index(node) < train.schedules.index(node2):	
-				table += '<tr><td>{}次</td><td>{}</td><td>--></td><td>{}</td></tr>'.format(train.id, node.time_stamp, node2.time_stamp)
+				table += '<tr><td>{}次</td><td>{}</td><td>--></td><td>{}</td><td>{}</td></tr>'.format(train.id, node.time_stamp, node2.time_stamp, '?')
 	table += '</tbody></table>'
 
 	print(table)
 
 	
-def printForm(timetable = None):
-	if timetable is None:
-		return
-
-	selection = ''
-	for station in timetable.all_station_list:
-		selection += '<option value="{}">{}: {}</option>'.format(station.id, station.id, station.name)
-
-	content = ''
-	content += '<form method="POST" action="RunningTime.cgi">'
-	content += '起始站：<select name="sta1">'
-	content += selection
-	content += '</select><br />'
-	content += '終點站：<select name="sta2">'
-	content += selection
-	content += '</select><br />'
-	content += '<input type="submit" value="送出" />'
-	content += '</form>'
-	
-	print(content)
 	
 
 if __name__ == '__main__':
 	print('Content-Type: text/html; charset=utf-8\n')
 	print('<meta charset="utf-8">')
+	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
 	main()

@@ -16,10 +16,14 @@ from RUJson import *
 from RUTimeTable import *
 from datetime import time
 
+from CommonHTML import *
+
 _ = '一'
 
 def main():
-	print('<head><title>Look up timetable</title></head>')
+	print('<head><title>Look up timetable</title>')
+	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
+	print('</head>')
 
 	form  = cgi.FieldStorage()
 	if 'id' not in form:
@@ -31,6 +35,8 @@ def main():
 	LoadStation( timetable )
 	LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
 	timetable.SortAllNode()
+	
+	printForm( timetable )
 
 
 	trainID = form['id'].value
@@ -44,7 +50,7 @@ def main():
 	
 	print('Train No. {}<br />'.format(train.id))
 	print('<table>')
-	print('<thead><tr><th>{}</th><th>{}</th><th>{}</th></tr></thead>'.format('車站', '抵達時間', '開車時間'))
+	print('<thead><tr><th>{}</th><th>&nbsp;</th><th>{}</th><th>{}</th></tr></thead>'.format('車站', '抵達時間', '開車時間'))
 	print('<tbody>')
 
 	i = 0
@@ -56,9 +62,9 @@ def main():
 			if i < len(train.schedules) and train.schedules[i].station == node.station:
 				node2 = train.schedules[i]
 				i += 1
-				print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp ))
+				print('<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp ))
 			else:
-				print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, ''))
+				print('<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, ''))
 		else:
 			print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, '', node.time_stamp))
 	
