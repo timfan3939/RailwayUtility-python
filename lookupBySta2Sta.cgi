@@ -62,8 +62,14 @@ def main():
 		for node2 in station2.schedules:
 			if node2.train.id == train.id and \
 			   node2.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTBypass} and \
-			   train.schedules.index(node) < train.schedules.index(node2):	
-				table += '<tr><td>{}次</td><td>{}</td><td>--></td><td>{}</td><td>{}</td></tr>'.format(train.id, node.time_stamp, node2.time_stamp, '?')
+			   train.schedules.index(node) < train.schedules.index(node2):
+				table += '<tr>'
+				table += '<td><a href="lookupByTrainID.cgi?id={}">{}次</a></td>'.format(train.id, train.id)
+				table += '<td>{}</td>'.format(node.time_stamp)
+				table += '<td>--></td>'
+				table += '<td>{}</td>'.format(node2.time_stamp)
+				table += '<td>{}</td>'.format('?')
+				table += '</tr>'
 	table += '</tbody></table>'
 
 	print(table)
