@@ -31,20 +31,19 @@ def printMeta():
 	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
 
 
-def main():	
-	printForm( timetable )
-	
+def main():		
 	form  = cgi.FieldStorage()
 	if 'id' not in form:
 		print('<H1>ID is not given</H1>')
 		return
 		
-
 	timetable = RUTimeTable()
 	
 	LoadStation( timetable )
 	LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
 	timetable.SortAllNode()	
+	
+	printForm( timetable )
 
 	trainID = form['id'].value
 	if trainID not in timetable.train_dict_by_id:
