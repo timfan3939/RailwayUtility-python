@@ -20,6 +20,7 @@ def printHead():
 def printMeta():
 	print( '<meta charset="utf-8" \> ')
 	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
+	print( '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">' )
 
 def main():
 	print( '<body>' )
@@ -44,5 +45,7 @@ def main():
 
 if __name__ == '__main__':	
 	print( 'Content-Type: text/html; charset=utf-8\n' )
+	print( '<HTML lang="utf-8">'
 	printHead()
 	main()
+	print( '</HTML>' )

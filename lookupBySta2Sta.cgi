@@ -82,5 +82,7 @@ def main():
 
 if __name__ == '__main__':
 	print('Content-Type: text/html; charset=utf-8\n')
+	print( '<HTML lang="utf-8">'
 	printHead()
 	main()
+	print( '</HTML>' )
