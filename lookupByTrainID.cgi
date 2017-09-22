@@ -69,7 +69,7 @@ def main():
 	table += '<tbody>'
 	
 	i = 0
-	counter = 1
+	counter = 0
 	while i < len(train.schedules):
 		node = train.schedules[i]
 		i += 1
