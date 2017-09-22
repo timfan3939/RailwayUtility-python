@@ -56,7 +56,7 @@ def main():
 	
 	table = ''
 	table += 'Train No. {}<br />'.format(train.id)
-	table += '<table>'
+	table += '<table width="100%">'
 	table += '<thead>'
 	table += '<tr>'
 	table += '<th></th>'.format('順序')

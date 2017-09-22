@@ -31,7 +31,7 @@ def printMeta():
 	print( '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">' )
 
 def main():
-	print( '<body' )
+	print( '<body>' )
 	timetable = RUTimeTable()
 	
 	LoadStation( timetable )
@@ -53,7 +53,17 @@ def main():
 	station2 = timetable.station_dict_by_id[ sta2 ]
 	
 	table = ''
-	table += '<table><thead><tr><th>車次</th><th>{}</th><th>--></th><th>{}</th><th>{}</th></tr></thead><tbody>'.format(station1.name, station2.name, '行駛時間')
+	table += '<table width="100%">'
+	table += '<thead>'
+	table += '<tr>'
+	table += '<th>車次</th>'
+	table += '<th>{}</th>'.format(station1.name)
+	table += '<th>{}</th>'.format('-->')
+	table += '<th>{}</th>'.format(station2.name)
+	table += '<th>{}</th>'.format('行駛時間')
+	table += '</tr>'
+	table += '</thead>'
+	table += '<tbody>'
 
 	
 	for node in station1.schedules:
