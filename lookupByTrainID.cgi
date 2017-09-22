@@ -58,6 +58,7 @@ def main():
 	table += '<table>'
 	table += '<thead>'
 	table += '<tr>'
+	table += '<th></th>'.format('順序')
 	table += '<th></th>'.format('車站')
 	table += '<th></th>'.format('&nbsp;')
 	table += '<th></th>'.format('抵達時間')
@@ -68,19 +69,39 @@ def main():
 	table += '<tbody>'
 	
 	i = 0
+	counter = 1
 	while i < len(train.schedules):
 		node = train.schedules[i]
 		i += 1
+		counter += 1
 
 		if node.node_type == RUTTNodeType.RUTTArrival or node.node_type == RUTTNodeType.RUTTStopOnly:
 			if i < len(train.schedules) and train.schedules[i].station == node.station:
 				node2 = train.schedules[i]
 				i += 1
-				table += '<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp )
+				table += '<tr>'
+				table += '<td>{}</td>'.format(counter)
+				table += '<td>{}</td>'.format(node.station.name)
+				table += '<td>↓</td>'
+				table += '<td>{}</td>'.format(node.time_stamp)
+				table += '<td>{}</td>'.format(node2.time_stamp)
+				table += '</tr>'
 			else:
-				table += '<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, '')
+				table += '<tr>'
+				table += '<td>{}</td>'.format(counter)
+				table += '<td>{}</td>'.format(node.station.name)
+				table += '<td>↓</td>'
+				table += '<td>{}</td>'.format(node.time_stamp)
+				table += '<td>{}</td>'.format('&nbsp;')
+				table += '</tr>'
 		else:
-			table += '<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, '', node.time_stamp)
+			table += '<tr>'
+			table += '<td>{}</td>'.format(counter)
+			table += '<td>{}</td>'.format(node.station.name)
+			table += '<td>↓</td>'
+			table += '<td>{}</td>'.format('&nbsp;')
+			table += '<td>{}</td>'.format(node.time_stamp)
+			table += '</tr>'
 	
 
 	table += '</tbody>'
