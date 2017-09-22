@@ -52,7 +52,7 @@ def main():
 	station2 = timetable.station_dict_by_id[ sta2 ]
 	
 	table = ''
-	table += '<table><thead><th>車次</th><th>{}</th><th>--></th><th>{}</th><th>{}</th></thead><tbody>'.format(station1.name, station2.name, '行駛時間')
+	table += '<table><thead><tr><th>車次</th><th>{}</th><th>--></th><th>{}</th><th>{}</th></tr></thead><tbody>'.format(station1.name, station2.name, '行駛時間')
 
 	
 	for node in station1.schedules:

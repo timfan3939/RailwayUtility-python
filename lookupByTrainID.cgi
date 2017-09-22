@@ -31,39 +31,43 @@ def printMeta():
 	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0" \>' )
 
 
-def main():
-	print('<head><title>Look up timetable</title>')
-	print( '<meta name="viewport" content="width=device-width, initial-scale=1.0">' )
-	print('</head>')
-
+def main():	
+	printForm( timetable )
+	
 	form  = cgi.FieldStorage()
 	if 'id' not in form:
 		print('<H1>ID is not given</H1>')
 		return
+		
 
 	timetable = RUTimeTable()
 	
 	LoadStation( timetable )
 	LoadTRAJsonTimetable( timetable, '/var/www/html/RUpy/file/20170913.json', encoding='utf-8' )
-	timetable.SortAllNode()
-	
-	printForm( timetable )
-
+	timetable.SortAllNode()	
 
 	trainID = form['id'].value
 	if trainID not in timetable.train_dict_by_id:
 		print('<H1> Train No. {} does not exists.</H1>'.format(trainID))
 		return
-	
+		
 	train = timetable.train_dict_by_id[trainID]
 	
-
 	
-	print('Train No. {}<br />'.format(train.id))
-	print('<table>')
-	print('<thead><tr><th>{}</th><th>&nbsp;</th><th>{}</th><th>{}</th></tr></thead>'.format('車站', '抵達時間', '開車時間'))
-	print('<tbody>')
-
+	table = ''
+	table += 'Train No. {}<br />'.format(train.id)
+	table += '<table>'
+	table += '<thead>'
+	table += '<tr>'
+	table += '<th></th>'.format('車站')
+	table += '<th></th>'.format('&nbsp;')
+	table += '<th></th>'.format('抵達時間')
+	table += '<th></th>'.format('開車時間')	
+	table += '</tr>'
+	table += '</thead>'
+	
+	table += '<tbody>'
+	
 	i = 0
 	while i < len(train.schedules):
 		node = train.schedules[i]
@@ -73,15 +77,18 @@ def main():
 			if i < len(train.schedules) and train.schedules[i].station == node.station:
 				node2 = train.schedules[i]
 				i += 1
-				print('<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp ))
+				table += '<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, node2.time_stamp )
 			else:
-				print('<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, ''))
+				table += '<tr><td>{}</td><td>↓</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, node.time_stamp, '')
 		else:
-			print('<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, '', node.time_stamp))
+			table += '<tr><td>{}</td><td>{}</td><td>{}</td></tr>'.format( node.station.name, '', node.time_stamp)
 	
 
-	print('</tbody>')
-	print('</table>')
+	table += '</tbody>'
+	table += '</table>'
+	
+	print table
+	print( '</body>' )
 
 
 if __name__ == '__main__':
