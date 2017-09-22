@@ -87,7 +87,7 @@ def main():
 	table += '</tbody>'
 	table += '</table>'
 	
-	print table
+	print( table )
 	print( '</body>' )
 
 
