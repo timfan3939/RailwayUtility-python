@@ -65,7 +65,7 @@ def main():
 	table += '</thead>'
 	table += '<tbody>'
 
-	
+	dummyDate = datetime.date(2017,01,01)
 	for node in station1.schedules:
 		if node.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTUnknown}:
 			continue
@@ -74,12 +74,14 @@ def main():
 			if node2.train.id == train.id and \
 			   node2.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTBypass} and \
 			   train.schedules.index(node) < train.schedules.index(node2):
+				delta = datetime.datetime.combine(dummyDate, node2.time_stamp) - datetime.datetime.combine(dummyDate, node.time_stamp)
+				
 				table += '<tr>'
 				table += '<td><a href="lookupByTrainID.cgi?id={}">{}次</a></td>'.format(train.id, train.id)
 				table += '<td>{}</td>'.format(node.time_stamp)
 				table += '<td>--></td>'
 				table += '<td>{}</td>'.format(node2.time_stamp)
-				table += '<td>{}</td>'.format('?')
+				table += '<td>{}</td>'.format(delta.total_seconds)
 				table += '</tr>'
 	table += '</tbody></table>'
 
