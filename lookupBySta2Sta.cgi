@@ -14,7 +14,7 @@ cgitb.enable(display = 0, logdir = '/home/timfan3939/log/', format='txt')
 
 from RUJson import *
 from RUTimeTable import *
-from datetime import time
+from datetime import *
 
 from CommonHTML import *
 
@@ -65,7 +65,7 @@ def main():
 	table += '</thead>'
 	table += '<tbody>'
 
-	dummyDate = datetime.date(2017,01,01)
+	dummyDate = date(2017,1,1)
 	for node in station1.schedules:
 		if node.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTUnknown}:
 			continue
@@ -74,14 +74,16 @@ def main():
 			if node2.train.id == train.id and \
 			   node2.node_type in {RUTTNodeType.RUTTArrival, RUTTNodeType.RUTTBypass} and \
 			   train.schedules.index(node) < train.schedules.index(node2):
-				delta = datetime.datetime.combine(dummyDate, node2.time_stamp) - datetime.datetime.combine(dummyDate, node.time_stamp)
+				delta = datetime.combine(dummyDate, node2.time_stamp) - datetime.combine(dummyDate, node.time_stamp)
+				if delta.total_seconds() < 0:
+					delta += timedelta(days = 1)
 				
 				table += '<tr>'
 				table += '<td><a href="lookupByTrainID.cgi?id={}">{}次</a></td>'.format(train.id, train.id)
 				table += '<td>{}</td>'.format(node.time_stamp)
 				table += '<td>--></td>'
 				table += '<td>{}</td>'.format(node2.time_stamp)
-				table += '<td>{}</td>'.format(delta.total_seconds)
+				table += '<td>{}分</td>'.format(delta.total_seconds()/60.0)
 				table += '</tr>'
 	table += '</tbody></table>'
 
