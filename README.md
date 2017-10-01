@@ -4,5 +4,7 @@
 - 輸出事先定義的時刻表
 - 產生運行圖
 
+See [this webpage](https://transport.ctfan.idv.tw/RUpy/)  for current result
+
 
 The project was started in 2016.10.23
