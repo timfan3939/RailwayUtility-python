@@ -2,7 +2,7 @@
 
 from xml.dom.minidom import *
 from RUTimeTable import *
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, date
 
 
 def LoadStation(timetable):
@@ -20,7 +20,6 @@ def LoadTHSRCXMLTimetable(timetable, filename, encoding = None):
 	xmlFile = xml.dom.minidom.parse(filename)
 	xmlRoot = xmlFile.documentElement
 	
-	print(xmlRoot.tagName)
 	if xmlRoot.tagName != 'TWHSRTrainList':
 		print('Error parsing the root of document')
 		return
@@ -31,8 +30,7 @@ def LoadTHSRCXMLTimetable(timetable, filename, encoding = None):
 		newTrain = timetable.AddTrain(train.getAttribute('Train'))
 		newTrain.direction = train.getAttribute('LineDir')
 		
-		schedules = train.getElementsByTagName('TimeInfo')
-		
+		schedules = train.getElementsByTagName('TimeInfo')		
 		length = len(schedules)
 		
 		for schedule in schedules:
@@ -43,8 +41,7 @@ def LoadTHSRCXMLTimetable(timetable, filename, encoding = None):
 			order = int(schedule.getAttribute('Order'))
 			
 			
-			if order != 1:
-			
+			if order != 1:			
 				arrTime = datetime.strptime(arrTime,'%H%M').time()
 				arrTTNode = RUTTNode(station, newTrain, arrTime, RUTTNodeType.RUTTArrival)
 				newTrain.schedules.append(arrTTNode)
@@ -55,26 +52,109 @@ def LoadTHSRCXMLTimetable(timetable, filename, encoding = None):
 				depTTNode = RUTTNode(station, newTrain, depTime, RUTTNodeType.RUTTDeparture)				
 				newTrain.schedules.append(depTTNode)				
 				station.schedules.append(depTTNode)
+				
+				
+#           staA        staB
+#  TrainA  node1  -->  node3
+#    ...   
+#  TrainB  node2  -->  node4
+	
+				
+def ComputeByPass(timetable):
+	len_trainList = len(timetable.all_train_list)
+	dummyDate = date(2017,1,1)
+	
+	for num_traA in range(len_trainList):
+		for num_traB in range(num_traA+1, len_trainList):
+			trainA = timetable.all_train_list[num_traA]
+			trainB = timetable.all_train_list[num_traB]
+			
+			if trainA.direction != trainB.direction:
+				continue
+			
+			for node1 in trainA.schedules:
+				
+				staA = node1.station				
+				index1sta = staA.schedules.index(node1)
+				
+				node2 = None
+				for index2sta in range(0, len(staA.schedules)):
+					if staA.schedules[index2sta].train == trainB:
+						node2 = staA.schedules[index2sta]
+						break
+				
+				if node2 is None:
+					continue
+					
+				index1tra = trainA.schedules.index(node1)
+				node4found = False
+				for index3tra in range(index1tra+1, len(trainA.schedules)):
+					if node4found is True:
+						break
+						
+					node3 = trainA.schedules[index3tra]
+					
+					staB = node3.station
+					index3sta = staB.schedules.index(node3)
+					
+					node4 = None
+					for index4sta in range(0, len(staB.schedules)):
+						if staB.schedules[index4sta] == node2:
+							continue
+						if staB.schedules[index4sta].train == trainB:
+							node4 = staB.schedules[index4sta]
+							break
+						
+					if node4 is None:
+						continue
+
+					time1 = datetime.combine(dummyDate, node1.time_stamp)
+					time2 = datetime.combine(dummyDate, node2.time_stamp)
+					time3 = datetime.combine(dummyDate, node3.time_stamp)
+					time4 = datetime.combine(dummyDate, node4.time_stamp)
+											
+					node4found = True	
+											
+					
+					if time1 < time2 and time3 < time4:
+						continue
+					elif time1 > time2 and time3 > time4:
+						continue
+		
+					
+					print('{}-{}-{} {}-{}-{}{}{}-{}-{} {}-{}-{}'.format(
+							node1.train.id, node1.station.name, node1.time_stamp,
+							node3.train.id, node3.station.name, node3.time_stamp,
+							'\n',
+							node2.train.id, node2.station.name, node2.time_stamp,
+							node4.train.id, node4.station.name, node4.time_stamp
+						)
+					)	
+					print()
+		
+		
 	
 
 def main():
 	m_timetable = RUTimeTable()
 	LoadStation(m_timetable)
 	
-	for line in m_timetable.line_list:
-		print(line.name)
-		for sta in line.line_stations:
-			print(sta)
+#	for line in m_timetable.line_list:
+#		print(line.name)
+#		for sta in line.line_stations:
+#			print(sta)
 	LoadTHSRCXMLTimetable(m_timetable, 'file/20171016.xml', 'utf-8')
 	
 	m_timetable.all_train_list.sort()
 	m_timetable.SortAllNode()
 	
-	for train in m_timetable.all_train_list:
-		print('Train {}'.format(train.id))
-		
-		for time in train.schedules:
-			print('    {} {}'.format(time.station.name, time.time_stamp))
+#	for train in m_timetable.all_train_list:
+#		print('Train {}'.format(train.id))
+#		
+#		for time in train.schedules:
+#			print('    {} {}'.format(time.station.name, time.time_stamp))
+			
+	ComputeByPass(m_timetable)
 			
 
 if __name__ == '__main__':
