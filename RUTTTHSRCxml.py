@@ -119,18 +119,37 @@ def ComputeByPass(timetable):
 					if time1 < time2 and time3 < time4:
 						continue
 					elif time1 > time2 and time3 > time4:
-						continue
-		
+						continue	
 					
-					print('{}-{}-{} {}-{}-{}{}{}-{}-{} {}-{}-{}'.format(
-							node1.train.id, node1.station.name, node1.time_stamp,
-							node3.train.id, node3.station.name, node3.time_stamp,
-							'\n',
-							node2.train.id, node2.station.name, node2.time_stamp,
-							node4.train.id, node4.station.name, node4.time_stamp
-						)
-					)	
-					print()
+					PrintSquare(node1, node2, node3, node4)
+
+					
+def PrintSquare(node1, node2, node3, node4):
+	str = ''
+	schA = node1.train.schedules
+	schB = node2.train.schedules
+	indexA = schA.index(node1)
+	indexB = schB.index(node2)
+	
+	str = '{}-> '.format(node1.train.id)	
+	while indexA < len(schA):
+		node = schA[indexA]
+		str += '{}-{} '.format(node.station.name, node.time_stamp)
+		if node == node3:
+			break
+		indexA += 1
+	str += '\n'
+	
+	str += '{}-> '.format(node2.train.id)
+	while indexB < len(schB):
+		node = schB[indexB]
+		str += '{}-{} '.format(node.station.name, node.time_stamp)
+		if node == node4:
+			break
+		indexB+= 1
+	str += '\n'
+
+	print(str)
 		
 		
 	
