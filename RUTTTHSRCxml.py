@@ -131,7 +131,7 @@ def PrintSquare(node1, node2, node3, node4):
 	indexA = schA.index(node1)
 	indexB = schB.index(node2)
 	
-	str = '{}-> '.format(node1.train.id)	
+	str = '{:>4}-> '.format(node1.train.id)	
 	while indexA < len(schA):
 		node = schA[indexA]
 		str += '{}-{} '.format(node.station.name, node.time_stamp)
@@ -140,7 +140,7 @@ def PrintSquare(node1, node2, node3, node4):
 		indexA += 1
 	str += '\n'
 	
-	str += '{}-> '.format(node2.train.id)
+	str += '{:>4}-> '.format(node2.train.id)
 	while indexB < len(schB):
 		node = schB[indexB]
 		str += '{}-{} '.format(node.station.name, node.time_stamp)
